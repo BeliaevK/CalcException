@@ -5,6 +5,9 @@ package ru.CalcException;
  */
 public class MainException extends Exception {
 
+    public MainException() {
+    }
+
     public MainException(String msg) {
     }
 }

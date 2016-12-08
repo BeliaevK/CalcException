@@ -5,7 +5,9 @@ package ru.CalcException;
  */
 public class WrongNumFormat extends MainException {
 
-    public WrongNumFormat(String msg) {
-        super(msg);
+    public WrongNumFormat() {
+
     }
+
+
 }

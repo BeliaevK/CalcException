@@ -8,7 +8,7 @@ import java.io.InputStreamReader;
  * Created by Scala on 07.12.2016.
  */
 public class Calc {
-    public static void main(String[] args) throws IOException,WrongNumFormat {
+    public static void main(String[] args) throws IOException, WrongNumFormat, WrongIndOfBound {
         while (true) {
             try {
                 read();
@@ -16,47 +16,54 @@ public class Calc {
             catch (WrongNumFormat e){
                 System.out.println("Отловлен неверный формат данных");
             }
+            catch (DivisionbyZero e){
+                System.out.println("Деление на ноль невозможно");
+            }
+            catch (WrongIndOfBound e){
+                System.out.println("Отловлены неверно введенные данные");
+            }
         }
     }
 
-    public static void read () throws IOException, WrongNumFormat {
+    public static void read () throws IOException, WrongNumFormat, DivisionbyZero, WrongIndOfBound {
         boolean run = true;
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         System.out.println("Выберите тип калькулятора: s - обычный, i - инженерный");
         String type = reader.readLine();
-        if (type.equals("s")) {
-            System.out.println("Введите ваше выражение в формате 'x + y'");
-            String op = reader.readLine();
-            Std.std(op);
-        }
-        else
-        if (type.equals("i")){
-            while (run) {
-                try {
-                    System.out.println("Инженерный тип калькулятора. Вычисляющий: sin,cos,tan,log,log10." +
-                            " \nВведите математическую функцию для вычесления:");
-                    String op = reader.readLine();
-                    if (op.equals("sin") || op.equals("cos") || op.equals("tan") || op.equals("log") || op.equals("log10")) {
-                        System.out.println("Введите число");
-                        int j1 = Integer.parseInt(reader.readLine());
-                        Inj.inj(op, j1);
-                        run = false;
-                    } else {
-                        System.out.println("Неверно введена функция");}
+        switch (type) {
+            case "s":
+                System.out.println("Введите ваше выражение в формате 'x + y'");
+                String op = reader.readLine();
+                Std.std(op);
+                break;
+            case "i":
+                while (run) {
+                    try {
+                        System.out.println("Инженерный тип калькулятора. Вычисляющий: sin,cos,tan,log,log10." +
+                                " \nВведите математическую функцию для вычесления:");
+                        String op1 = reader.readLine();
+                        if (op1.equals("sin") || op1.equals("cos") || op1.equals("tan") || op1.equals("log") || op1.equals("log10")) {
+                            System.out.println("Введите число");
+                            int j1 = Integer.parseInt(reader.readLine());
+                            Inj.inj(op1, j1);
+                            run = false;
+                        } else {
+                            System.out.println("Неверно введена функция");
+                        }
+                    } catch (NumberFormatException e) {
+                        throw new WrongNumFormat();
+                    }
                 }
-                catch (NumberFormatException e) {
-                    throw new WrongNumFormat("xZC");
-                  //  System.out.println("Неверный формат введенных данных");
-                }
-            }
+                break;
+            default:
+                System.out.println("Выбран неверный тип калькулятора");
+                break;
         }
-        else {
-            System.out.println("Выбран неверный тип калькулятора");
-        }
+        reader.close();
     }
 
     public static class Std {
-        public static void std(String op) throws IOException {
+        public static void std(String op) throws IOException, DivisionbyZero, WrongNumFormat, WrongIndOfBound {
             int res = 0;
             String[] str = op.split(" ");
             try {
@@ -80,10 +87,13 @@ public class Calc {
                 System.out.println("Результат: " + res);
             }
             catch (NumberFormatException e){
-                System.out.println("Неверный формат введенных данных");
+                throw new WrongNumFormat();
             }
             catch (ArithmeticException e) {
-                System.out.println("Деление на ноль невозможно");
+                throw new DivisionbyZero();
+            }
+            catch (IndexOutOfBoundsException e){
+                throw new WrongIndOfBound();
             }
         }
     }

@@ -5,7 +5,5 @@ package ru.CalcException;
  */
 public class DivisionbyZero extends MainException {
 
-    public DivisionbyZero(String msg) {
-        super(msg);
-    }
+    public DivisionbyZero(){}
 }
