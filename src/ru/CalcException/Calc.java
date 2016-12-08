@@ -9,23 +9,27 @@ import java.io.InputStreamReader;
  */
 public class Calc {
     public static void main(String[] args) throws IOException, WrongNumFormat, WrongIndOfBound {
-        while (true) {
-            try {
-                read();
-            }
-            catch (WrongNumFormat e){
-                System.out.println("Отловлен неверный формат данных");
-            }
-            catch (DivisionbyZero e){
-                System.out.println("Деление на ноль невозможно");
-            }
-            catch (WrongIndOfBound e){
-                System.out.println("Отловлены неверно введенные данные");
-            }
-        }
+       try {
+           while (true) {
+               try {
+                   read();
+               }
+               catch (WrongNumFormat e){
+                   System.out.println("Отловлен неверный формат данных");
+               }
+               catch (DivisionbyZero e){
+                   System.out.println("Деление на ноль невозможно");
+               }
+               catch (WrongIndOfBound e){
+                   System.out.println("Отловлены неверно введенные данные");
+               }
+           }
+       } catch (MainException e){
+           System.out.println("Не верно выбран тип калькулятора");
+       }
     }
 
-    public static void read () throws IOException, WrongNumFormat, DivisionbyZero, WrongIndOfBound {
+    public static void read () throws IOException, MainException {
         boolean run = true;
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         System.out.println("Выберите тип калькулятора: s - обычный, i - инженерный");
@@ -56,10 +60,8 @@ public class Calc {
                 }
                 break;
             default:
-                System.out.println("Выбран неверный тип калькулятора");
-                break;
+            throw new  MainException();
         }
-        reader.close();
     }
 
     public static class Std {
